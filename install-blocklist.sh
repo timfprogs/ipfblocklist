@@ -103,7 +103,7 @@ END
 fi
 
 fcrontab fcrontab_old
-rum fcrontab_old
+rm fcrontab_old
 
 # Update language cache
 

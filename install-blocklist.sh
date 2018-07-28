@@ -3,6 +3,7 @@
 # Locations of settings files
 updatedir="/var/ipfire/blocklist"
 temp_dir="$TMP"
+top="/home/tim/Programs/Block/temp"
 
 phase2="no"
 
@@ -61,17 +62,17 @@ if [[ $phase2 == "no" ]]; then
   while read -r name path owner mode || [[ -n "$name" ]]; do
     echo --
     echo Download $name
+    path=$top/$path
+    echo $path
     if [[ ! -d $path ]]; then mkdir -p $path; fi
     if [[ $name != "." ]];
     then
-      echo wget "https://github.com/timfprogs/ipfidsupdate/raw/master/$name" -O $path/$name
+      wget "https://github.com/timfprogs/ipfblocklist/raw/master/$name" -O $path/$name
       chown $owner $path/$name
-      chmod $mode $path/$name
-      ;
+      chmod $mode $path/$name;
     else
       chown $owner $path
-      chmod $mode $path
-      ;
+      chmod $mode $path;
     fi
   done < "MANIFEST"
 
@@ -87,7 +88,7 @@ fi
 
 start=$(($RANDOM % 40 + 5))
 stop=$(($start + 10))
-CRONTAB="%hourly,nice(1),random,serialonce(true) $start-$stop /usr/local/bin/snort-update.pl";;
+CRONTAB="%hourly,nice(1),random,serialonce(true) $start-$stop /usr/local/bin/snort-update.pl"
 
 # Update the crontab
 

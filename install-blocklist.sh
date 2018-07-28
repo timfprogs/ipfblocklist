@@ -3,7 +3,6 @@
 # Locations of settings files
 updatedir="/var/ipfire/blocklist"
 temp_dir="$TMP"
-top="/home/tim/Programs/Block/temp"
 
 phase2="no"
 
@@ -62,7 +61,6 @@ if [[ $phase2 == "no" ]]; then
   while read -r name path owner mode || [[ -n "$name" ]]; do
     echo --
     echo Download $name
-    path=$top/$path
     echo $path
     if [[ ! -d $path ]]; then mkdir -p $path; fi
     if [[ $name != "." ]];
@@ -105,6 +103,7 @@ END
 fi
 
 fcrontab fcrontab_old
+rum fcrontab_old
 
 # Update language cache
 
@@ -112,6 +111,6 @@ update-lang-cache
 
 # Add link to startup
 
-if [[ ! -e $top/etc/rc.d/rcsysinit.d/S86blocklist ]]; then
-  ln -s $top/etc/rc.d/rc.init/ipblocklist  $top/etc/rc.d/rcsysinit.d/S86blocklist;
+if [[ ! -e /etc/rc.d/rcsysinit.d/S86blocklist ]]; then
+  ln -s /etc/rc.d/rc.init/ipblocklist  /etc/rc.d/rcsysinit.d/S86blocklist;
 fi

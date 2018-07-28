@@ -1,0 +1,170 @@
+############################################################################
+#                                                                          #
+# IP Address blocklists for IPFire                                         #
+#                                                                          #
+# This file contains a list of blocklist sources that will replace the one #
+# internal to the updated if it is found at /var/ipfire/blocklist/sources. #
+# The intention is to provide a common source of information for both the  #
+# updater and a possible WUI.                                              #
+#                                                                          #
+# The chains created in the packet filter will be named by the top level   #
+# key and this will also be used in the log message to identify the reason #
+# for the dropped packet.                                                  #
+#                                                                          #
+# The fields are:                                                          #
+#                                                                          #
+# name    The blocklist's full name                                        #
+# url     URL of the file containing the list                              #
+# info    URL giving information about the source                          #
+# parser  The parser function used to extract IP addresses from the        #
+#         downloaded list                                                  #
+# enable  Set to 1 to enable the list by default.  Overridden by the       #
+#         settings file                                                    #
+# safe    'yes' if the list is unlikely to contain addresses that can be   #
+#         used for legitimate traffic, or 'no' otherwise                   #
+#                                                                          #
+# The info and safe fields are purely for documentation.                   #
+#                                                                          #
+# Note that the Emerging Threats blocklist is a composite list containing  #
+# addresses from some of the other lists.  It is unnecessary to enable     #
+# this list if the other lists are enabled.                                #
+#                                                                          #
+############################################################################
+
+%sources = ( 'EMERGING_FWRULE' => { 'name'    => 'Emerging Threats Blocklist',
+                                    'url'     => 'https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt',
+                                    'info'    => 'http://doc.emergingthreats.net/bin/view/Main/EmergingFirewallRules',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 1,
+                                    'method'  => 'check-header-time',
+                                    'rate'    => 1,
+                                    'safe'    => 'no' },
+             'EMERGING_COMPROMISED' => { 'name' => 'Emerging Threats Compromised IPs',
+                                    'url'     => 'https://rules.emergingthreats.net/blockrules/compromised-ips.txt',
+                                    'info'    => 'http://doc.emergingthreats.net/bin/view/Main/CompromisedHost',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'check-header-time',
+                                    'rate'    => 1,
+                                    'safe'    => 'no' },
+             'SPAMHAUS_DROP'   => { 'name'    => "Spamhaus Don't Route or Peer List",
+                                    'url'     => 'https://www.spamhaus.org/drop/drop.txt',
+                                    'info'    => 'https://www.spamhaus.org/drop/',
+                                    'parser'  => 'text_with_semicolon_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'check-header-time',
+                                    'rate'    => 1,
+                                    'safe'    => 'yes' },
+             'SPAMHAUS_EDROP'  => { 'name'    => "Spamhaus Extended Don't Route or Peer List",
+                                    'url'     => 'https://www.spamhaus.org/drop/edrop.txt',
+                                    'info'    => 'https://www.spamhaus.org/drop/',
+                                    'parser'  => 'text_with_semicolon_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'check-header-time',
+                                    'rate'    => 1,
+                                    'safe'    => 'no' },
+             'DSHIELD'         => { 'name'    => 'Dshield.org Recommended Block List',
+                                    'url'     => 'https://www.dshield.org/block.txt',
+                                    'info'    => 'https://dshield.org/',
+                                    'parser'  => 'dshield',
+                                    'enable'  => 0,
+                                    'method'  => 'check-header-time',
+                                    'rate'    => 1,
+                                    'safe'    => 'no' },
+             'FEODO_IP'        => { 'name'    => 'Feodo Trojan IP Blocklist (Versions A, C, D)',
+                                    'url'     => 'https://feodotracker.abuse.ch/blocklist/?download=ipblocklist',
+                                    'info'    => 'https://feodotracker.abuse.ch/blocklist',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'wget',
+                                    'rate'    => 6,
+                                    'safe'    => 'no' },
+             'FEODO_BAD_IP'    => { 'name'    => 'Feodo Trojan BadIP Blocklist (Version B)',
+                                    'url'     => 'https://feodotracker.abuse.ch/blocklist/?download=badips',
+                                    'info'    => 'https://feodotracker.abuse.ch/blocklist',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'wget',
+                                    'rate'    => 6,
+                                    'safe'    => 'yes' },
+             'ABUSE_CH'        => { 'name'    => 'Abuse.ch Ransomware C&C Blocklist',
+                                    'url'     => 'https://ransomwaretracker.abuse.ch/downloads/RW_IPBL.txt',
+                                    'info'    => 'https://ransomwaretracker.abuse.ch/blocklist/',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'check-header-time',
+                                    'rate'    => 1,
+                                    'safe'    => 'no' },
+             'ZEUS_IP'         => { 'name'    => 'Abuse.ch Zeus IP Blocklist',
+                                    'url'     => 'https://zeustracker.abuse.ch/blocklist.php?download=badips',
+                                    'info'    => 'https://zeustracker.abuse.ch/blocklist.php',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'wget',
+                                    'rate'    => 6,
+                                    'safe'    => 'no' },
+             'ZEUS_BAD_IP'     => { 'name'    => 'Abuse.ch Zeus BadIP Blocklist',
+                                    'url'     => 'https://zeustracker.abuse.ch/blocklist.php?download=ipblocklist',
+                                    'info'    => 'https://zeustracker.abuse.ch/blocklist.php',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'wget',
+                                    'rate'    => 6,
+                                    'safe'    => 'yes' },
+             'CIARMY'          => { 'name'    => 'The CINS Army List',
+                                    'url'     => 'http://cinsscore.com/list/ci-badguys.txt',
+                                    'info'    => 'https://cinsscore.com/#list',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'check-header-time',
+                                    'rate'    => 1,
+                                    'safe'    => 'no' },
+             'TOR_ALL'         => { 'name'    => 'Known TOR Nodes',
+                                    'url'     => 'https://www.dan.me.uk/torlist',
+                                    'info'    => 'https://www.dan.me.uk/tornodes',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'wget',
+                                    'rate'    => 6,
+                                    'safe'    => 'no' },
+             'TOR_EXIT'        => { 'name'    => 'Known TOR Exit Nodes',
+                                    'url'     => 'https://www.dan.me.uk/torlist/?exit',
+                                    'info'    => 'https://www.dan.me.uk/tornodes',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'wget',
+                                    'rate'    => 6,
+                                    'safe'    => 'no' },
+             'TALOS_MALICIOUS' => { 'name'    => 'Talos Malicious hosts list',
+                                    'url'     => 'https://www.talosintelligence.com/documents/ip-blacklist',
+                                    'info'    => 'https://www.talosintelligence.com/reputation',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'wget',
+                                    'rate'    => 24,
+                                    'safe'    => 'no' },
+             'ALIENVAULT'      => { 'name'    => 'AlienVault IP Reputation database',
+                                    'url'     => 'https://reputation.alienvault.com/reputation.generic',
+                                    'info'    => 'https://reputation.alienvault.com/',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'check-header-time',
+                                    'rate'    => 1,
+                                    'safe'    => 'no' },
+              'BOGON'          => { 'name'    => 'Bogus address list (Martian)',
+                                    'url'     => 'https://www.team-cymru.org/Services/Bogons/bogon-bn-agg.txt',
+                                    'info'    => 'http://www.team-cymru.com/bogon-reference-http.html',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'check-header-time',
+                                    'rate'    => 24,
+                                    'safe'    => 'yes' },
+              'BOGON_FULL'     => { 'name'    => 'Full Bogus Address List',
+                                    'url'     => 'https://www.team-cymru.org/Services/Bogons/fullbogons-ipv4.txt',
+                                    'info'    => 'http://www.team-cymru.com/bogon-reference-http.html',
+                                    'parser'  => 'text_with_hash_comments',
+                                    'enable'  => 0,
+                                    'method'  => 'check-header-time',
+                                    'rate'    => 24,
+                                    'safe'    => 'yes' }
+           );

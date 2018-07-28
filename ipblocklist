@@ -1,0 +1,31 @@
+#!/bin/sh
+# Begin $rc_base/init.d/blocklist
+
+. /etc/sysconfig/rc
+. $rc_functions
+
+case "$1" in
+	start)
+
+		boot_mesg "Setting up ip blocklist..."
+		/usr/local/bin/blocklist.pl start
+		;;
+
+	stop)
+		boot_mesg "Disabling ip blocklist..."
+		/usr/local/bin/blocklist.pl stop
+		;;
+
+	restart)
+		$0 stop
+		sleep 1
+		$0 start
+		;;
+
+	*)
+		echo "Usage: $0 {start|stop|restart}"
+		exit 1
+		;;
+esac
+
+# End $rc_base/init.d/blocklist

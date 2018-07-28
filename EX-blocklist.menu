@@ -1,0 +1,6 @@
+$subfirewall->{'95.blocklist'} = {
+           'caption' => "$Lang::tr{'blocklists'}",
+           'uri' => '/cgi-bin/blocklist.cgi',
+           'title' => "$Lang::tr{'blocklists'}",
+           'enabled' => 1,
+                               };

@@ -86,7 +86,7 @@ fi
 
 start=$(($RANDOM % 40 + 5))
 stop=$(($start + 10))
-CRONTAB="%hourly,nice(1),random,serialonce(true) $start-$stop /usr/local/bin/snort-update.pl"
+CRONTAB="%hourly,nice(1),random,serialonce(true) $start-$stop /usr/local/bin/blocklist.pl"
 
 # Update the crontab
 

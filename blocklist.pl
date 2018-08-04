@@ -474,6 +474,10 @@ sub delete_chain( $ )
 
   system( "$ipset destroy $chain" ) == 0 or
     log_message LOG_ERR, "Could not delete ipset ${chain}";
+
+  # Delete the save file
+
+  unlink "$savedir/$source.conf" if (-e "$savedir/$source.conf");
 }
 
 

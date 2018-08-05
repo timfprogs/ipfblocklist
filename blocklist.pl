@@ -477,7 +477,7 @@ sub delete_chain( $ )
 
   # Delete the save file
 
-  unlink "$savedir/$source.conf" if (-e "$savedir/$source.conf");
+  unlink "$savedir/$chain.conf" if (-e "$savedir/$chain.conf");
 }
 
 

@@ -112,5 +112,5 @@ update-lang-cache
 # Add link to startup
 
 if [[ ! -e /etc/rc.d/rcsysinit.d/S86blocklist ]]; then
-  ln -s /etc/rc.d/rc.init/ipblocklist  /etc/rc.d/rcsysinit.d/S86blocklist;
+  ln -s /etc/init.d/ipblocklist  /etc/rc.d/rcsysinit.d/S86blocklist;
 fi

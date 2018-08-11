@@ -338,6 +338,10 @@ sub do_update()
     {
       delete_chain( $source );
 
+      # Delete the save file
+
+      unlink "$savedir/$chain.conf" if (-e "$savedir/$chain.conf");
+
       delete $status{$source};
       $update_status  = 1;
     }
@@ -351,6 +355,10 @@ sub do_update()
     {
       delete_chain( $chain );
 
+      # Delete the save file
+
+      unlink "$savedir/$chain.conf" if (-e "$savedir/$chain.conf");
+      
       delete $status{$chain};
       $update_status  = 1;
     }
@@ -474,10 +482,6 @@ sub delete_chain( $ )
 
   system( "$ipset destroy $chain" ) == 0 or
     log_message LOG_ERR, "Could not delete ipset ${chain}";
-
-  # Delete the save file
-
-  unlink "$savedir/$chain.conf" if (-e "$savedir/$chain.conf");
 }
 
 

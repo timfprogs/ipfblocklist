@@ -340,7 +340,7 @@ sub do_update()
 
       # Delete the save file
 
-      unlink "$savedir/$chain.conf" if (-e "$savedir/$chain.conf");
+      unlink "$savedir/$source.conf" if (-e "$savedir/$source.conf");
 
       delete $status{$source};
       $update_status  = 1;

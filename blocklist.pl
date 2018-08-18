@@ -653,7 +653,7 @@ sub read_ipset( $ )
 
   foreach my $line (qx/$ipset list $chain/)
   {
-    next unless ($line =~ m|(\d+\.\d+\.\d+\.\d+(?:/\d+))|);
+    next unless ($line =~ m|(\d+\.\d+\.\d+\.\d+(?:/\d+)?)|);
 
     my $address = $1;
     $address .= "/32" if ($address !~ m|/\d+|);

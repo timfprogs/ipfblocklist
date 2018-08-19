@@ -656,7 +656,6 @@ sub read_ipset( $ )
     next unless ($line =~ m|(\d+\.\d+\.\d+\.\d+(?:/\d+)?)|);
 
     my $address = $1;
-    $address .= "/32" if ($address !~ m|/\d+|);
 
     $old_blocklist{$address} = 1;
   }

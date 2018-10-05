@@ -6,17 +6,7 @@ temp_dir="$TMP"
 
 phase2="no"
 
-# Default update settings
-
-VERSION=0
-
 if [[ ! -d $updatedir ]]; then mkdir -p $updatedir; fi
-
-# If there's an old settings file, read it and use it as the defaults
-if [[ -e $updatesettings ]]; then
-  echo read old settings
-  source $updatesettings
-fi
 
 while getopts ":2hH" opt; do
   case $opt in
@@ -25,23 +15,6 @@ while getopts ":2hH" opt; do
   *) echo "Usage: $0 [-2]"; exit 1;;
   esac
 done
-
-if [[ $phase2 == "no" ]]; then
-  # Check to see if there's a new version available
-
-  echo Check for new version
-
-  wget "https://github.com/timfprogs/ipfblocklist/raw/master/VERSION"
-
-  NEW_VERSION=`cat VERSION`
-  rm VERSION
-
-  # Set phase2 to yes to stop download of update
-
-  if [[ $VERSION -eq $NEW_VERSION ]]; then
-    phase2="yes"
-  fi
-fi
 
 if [[ $phase2 == "no" ]]; then
 

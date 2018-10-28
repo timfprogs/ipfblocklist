@@ -338,6 +338,8 @@ sub do_update()
     {
       delete_chain( $source );
 
+      unlink "$savedir/$source.conf" if (-e "$savedir/$source.conf");
+
       delete $status{$source};
       $update_status  = 1;
     }
@@ -350,6 +352,8 @@ sub do_update()
     if (not exists $sources{$chain})
     {
       delete_chain( $chain );
+
+      unlink "$savedir/$chain.conf" if (-e "$savedir/$chain.conf");
 
       delete $status{$chain};
       $update_status  = 1;
@@ -519,14 +523,20 @@ sub download_blocklist( $ )
 
   if ($proxy_settings{'UPSTREAM_PROXY'})
   {
-    my ($peer, $peerport) = (/^(?:[a-zA-Z ]+\:\/\/)?(?:[A-Za-z0-9\_\.\-]*?(?:\:[A-Za-z0-9\_\.\-]*?)?\@)?([a-zA-Z0-9\.\_\-]*?)(?:\:([0-9]{1,5}))?(?:\/.*?)?$/);
-
-    if ($peer)
+    if ($proxy_settings{'UPSTREAM_USER'})
     {
-      $ua->proxy( "html", "http://$peer:$peerport/" );
-    }
+      $wget_proxy = "--proxy=on --proxy-user=$proxy_settings{'UPSTREAM_USER'} --proxy-passwd=$proxy_settings{'UPSTREAM_PASSWORD'} -e http_proxy=http://$proxy_settings{'UPSTREAM_PROXY'}/";
 
-    $wget_proxy = "--proxy=on --proxy-user=$proxy_settings{'UPSTREAM_USER'} --proxy-passwd=$proxy_settings{'UPSTREAM_PASSWORD'} -e http_proxy=http://$peer:$peerport/";
+      $ua->proxy("http"  => "http://$proxy_settings{'UPSTREAM_USER'}:$proxy_settings{'UPSTREAM_PASSWORD'}\@$proxy_settings{'UPSTREAM_PROXY'}/");
+      $ua->proxy("https" => "http://$proxy_settings{'UPSTREAM_USER'}:$proxy_settings{'UPSTREAM_PASSWORD'}\@$proxy_settings{'UPSTREAM_PROXY'}/");
+    }
+    else
+    {
+      $wget_proxy = "--proxy=on -e http_proxy=http://$proxy_settings{'UPSTREAM_PROXY'}/";
+
+      $ua->proxy("http"  => "http://$proxy_settings{'UPSTREAM_PROXY'}/");
+      $ua->proxy("https" => "http://$proxy_settings{'UPSTREAM_PROXY'}/");
+    }
   }
 
   if ($sources{$chain}{'method'} eq 'check-header-time')
@@ -645,10 +655,10 @@ sub read_ipset( $ )
 
   foreach my $line (qx/$ipset list $chain/)
   {
-    next unless ($line =~ m|(\d+\.\d+\.\d+\.\d+(?:/\d+))|);
+    next unless ($line =~ m|(\d+\.\d+\.\d+\.\d+(?:/\d+)?)|);
 
     my $address = $1;
-    $address .= "/32" if ($address !~ m|/\d+|);
+#    $address .= "/32" if ($address !~ m|/\d+|);
 
     $old_blocklist{$address} = 1;
   }
@@ -681,7 +691,7 @@ sub update_source( $ )
 
   foreach my $address ( @new_blocklist )
   {
-    # We've got an address.  Add to set if it's new
+    # We've got an address.  Add to ipset if it's new
 
     if (exists $old_blocklist{$address})
     {

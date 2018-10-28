@@ -35,6 +35,7 @@ my $settings  = "${General::swroot}/blocklist/settings";
 my $status    = "${General::swroot}/blocklist/status";
 my $sources   = "${General::swroot}/blocklist/sources";
 my $getipstat = '/usr/local/bin/getipstat';
+my $version   = 1;
 my %mainsettings=();
 my %cgiparams=();
 my $errormessage='';
@@ -80,7 +81,8 @@ if ($cgiparams{'ACTION'} eq "$Lang::tr{'save'}")
     $new_settings{$item} = 'on' if (exists $new_settings{$item});
   }
 
-  $new_settings{'RATE'} = $cgiparams{'RATE'};
+  $new_settings{'RATE'}    = $cgiparams{'RATE'};
+  $new_settings{'VERSION'} = $version;
 
   General::writehash($settings, \%new_settings);
 

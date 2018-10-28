@@ -338,6 +338,11 @@ sub do_update()
     {
       delete_chain( $source );
 
+<<<<<<< HEAD
+=======
+      # Delete the save file
+
+>>>>>>> 5614bb8a75bbc09d4dd6d113e5292dedb7d8e82f
       unlink "$savedir/$source.conf" if (-e "$savedir/$source.conf");
 
       delete $status{$source};
@@ -353,8 +358,15 @@ sub do_update()
     {
       delete_chain( $chain );
 
+<<<<<<< HEAD
       unlink "$savedir/$chain.conf" if (-e "$savedir/$chain.conf");
 
+=======
+      # Delete the save file
+
+      unlink "$savedir/$chain.conf" if (-e "$savedir/$chain.conf");
+      
+>>>>>>> 5614bb8a75bbc09d4dd6d113e5292dedb7d8e82f
       delete $status{$chain};
       $update_status  = 1;
     }
@@ -658,7 +670,10 @@ sub read_ipset( $ )
     next unless ($line =~ m|(\d+\.\d+\.\d+\.\d+(?:/\d+)?)|);
 
     my $address = $1;
+<<<<<<< HEAD
 #    $address .= "/32" if ($address !~ m|/\d+|);
+=======
+>>>>>>> 5614bb8a75bbc09d4dd6d113e5292dedb7d8e82f
 
     $old_blocklist{$address} = 1;
   }

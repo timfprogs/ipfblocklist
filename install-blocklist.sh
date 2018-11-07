@@ -70,7 +70,7 @@ if grep blocklist fcrontab_old >>/dev/null; then
 else
   cat <<END >> fcrontab_old
 
-# Snort rule update
+# IP block list update
 $CRONTAB
 END
 fi

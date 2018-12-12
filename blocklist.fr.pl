@@ -12,5 +12,5 @@
 'blocklist check rate' => 'Actualiser le taux de contrôle',
 'blocklist slow' => 'Lent',
 'blocklist medium' => 'Moyen',
-'blocklist fast' => 'Vite'
+'blocklist fast' => 'Rapide'
 );

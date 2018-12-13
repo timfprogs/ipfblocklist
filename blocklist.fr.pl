@@ -10,7 +10,7 @@
 'blocklist safe' => 'Sûr',
 'blocklist enable' => 'Activer',
 'blocklist check rate' => 'Fréquence de mise à jour :',
-'blocklist slow' => 'Lente',
-'blocklist medium' => 'Intermédiaire',
-'blocklist fast' => 'Rapide'
+'blocklist slow' => 'Basse',
+'blocklist medium' => 'Moyenne',
+'blocklist fast' => 'Elevée'
 );

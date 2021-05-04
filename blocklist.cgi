@@ -36,7 +36,6 @@ my $status    = "${General::swroot}/blocklist/status";
 my $sources   = "${General::swroot}/blocklist/sources";
 my $getipstat = '/usr/local/bin/getipstat';
 my $version   = 1;
-my %mainsettings=();
 my %cgiparams=();
 my $errormessage='';
 my %color;
@@ -47,8 +46,7 @@ my %stats;
 
 #Read all parameters for site
 &Header::getcgihash( \%cgiparams);
-&General::readhash( "${General::swroot}/main/settings", \%mainsettings );
-&General::readhash( "/srv/web/ipfire/html/themes/".$mainsettings{'THEME'}."/include/colors.txt", \%color );
+&General::readhash( "/srv/web/ipfire/html/themes/ipfire/include/colors.txt", \%color );
 
 #Show Headers
 &Header::showhttpheaders();

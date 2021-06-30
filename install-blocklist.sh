@@ -59,14 +59,16 @@ fi
 
 start=$(($RANDOM % 40 + 5))
 stop=$(($start + 10))
-CRONTAB="%hourly,nice(1),random,serialonce(true) $start-$stop /usr/local/bin/blocklist.pl"
+blocklist_script=/usr/local/bin/blocklist.pl
+CRONTAB="%hourly,nice(1),random,serialonce(true) $start-$stop $blocklist_script"
 
 # Update the crontab
 
 fcrontab -l >fcrontab_old
 
-if grep blocklist fcrontab_old >>/dev/null; then
-  sed -i "/blocklist.pl/c$CRONTAB" fcrontab_old;
+if grep $blocklist_script fcrontab_old >>/dev/null; then
+  blocklist_script_escaped=$(echo $blocklist_script | sed 's/\//\\\//g')
+  sed -i "/$blocklist_script_escaped/c$CRONTAB" fcrontab_old;
 else
   cat <<END >> fcrontab_old
 
